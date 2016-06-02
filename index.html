@@ -9,11 +9,14 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Octopress install &lsquo;&rsquo;&lsquo;
+  <meta name="description" content="Octopress install 1
+2
+3
+4
 git clone git://github.com/imathis/octopress.git octopress
 cd octopress
 bundler install
-rake install #安装默认主题 &hellip;">
+rake install #安装默认主题 部署到Github &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,32 +85,42 @@ rake install #安装默认主题 &hellip;">
 
   <div class="entry-content"><h2>Octopress install</h2>
 
-<p>&lsquo;&rsquo;&lsquo;
-git clone git://github.com/imathis/octopress.git octopress
-cd octopress
-bundler install
-rake install #安装默认主题
-&rsquo;&lsquo;&rsquo;</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'>cd octopress
+</span><span class='line'>bundler install
+</span><span class='line'>rake install #安装默认主题</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>部署到Github Pages</h2>
 
 <p>在Github上创建一个新的仓库，仓库名的格式应按照username.github.io。其中，username是你的Github的user name。
 配置octpress的git仓库地址
-&lsquo;rake setup_github_pages&rsquo;
+<code>rake setup_github_pages</code>
 写blog
-’rake new_post[&lsquo;blog title&rsquo;]‘
-这条rake命令会自动在source/<em>post/目录下生成一个以YYYY-MM-DD-title为格式，以.markdown为扩展名的文件。这个文件是使用Markdown进行编写，会被转换成静态HTML文件。
-上传页面
-&lsquo;&rsquo;&lsquo;
-rake generate #根据source目录下的内容生成新的内容到</em>deploy目录下
-rake deploy #提交到远程的master分支下
-&rsquo;&lsquo;&rsquo;
-上传源码
-&lsquo;&rsquo;&lsquo;
-git add .
-git commit -m &ldquo;source for blog page&rdquo;
-git push origin source
-&rsquo;&lsquo;&rsquo;</p>
+<code>rake new_post['blog title']</code>
+这条rake命令会自动在source/_post/目录下生成一个以YYYY-MM-DD-title为格式，以.markdown为扩展名的文件。这个文件是使用Markdown进行编写，会被转换成静态HTML文件。
+上传页面</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate #根据source目录下的内容生成新的内容到_deploy目录下
+</span><span class='line'>rake deploy #提交到远程的master分支下</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这时候已经可以通过username.
+上传源码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git add .
+</span><span class='line'>git commit -m "source for blog page"
+</span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>Octopress themes</h2>
 </div>
