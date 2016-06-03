@@ -74,15 +74,24 @@ rake install #安装默认主题 部署到Github &hellip;">
 </span><span class='line'>rake install #安装默认主题</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>部署到Github Pages</h2>
+<h4>部署到Github Pages</h4>
 
-<p>在Github上创建一个新的仓库，仓库名的格式应按照username.github.io。其中，username是你的Github的user name。
-配置octpress的git仓库地址
-<code>rake setup_github_pages</code>
-写blog
-<code>rake new_post['blog title']</code>
-这条rake命令会自动在source/_post/目录下生成一个以YYYY-MM-DD-title为格式，以.markdown为扩展名的文件。这个文件是使用Markdown进行编写，会被转换成静态HTML文件。
-上传页面</p>
+<hr />
+
+<p>在Github上创建一个新的仓库，仓库名的格式应按照username.github.io。其中，username是你的Github的user name。</p>
+
+<h4>配置octpress的git仓库地址</h4>
+
+<p><code>rake setup_github_pages</code></p>
+
+<h4>写blog</h4>
+
+<p><code>rake new_post['blog title']</code>
+这条rake命令会自动在source/_post/目录下生成一个以YYYY-MM-DD-title为格式，以.markdown为扩展名的文件。这个文件是使用Markdown进行编写，会被转换成静态HTML文件。</p>
+
+<p>如果这篇文章没有完成，可以加一行published: false。在生成新内容，部署到远程时，这篇文章将不会被发表。</p>
+
+<h4>发布blog</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -90,8 +99,9 @@ rake install #安装默认主题 部署到Github &hellip;">
 </span><span class='line'>rake deploy #提交到远程的master分支下</span></code></pre></td></tr></table></div></figure>
 
 
-<p>这时候已经可以通过username.
-上传源码</p>
+<p>这时候已经可以通过username.github.io访问</p>
+
+<h4>发布源码</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -101,7 +111,205 @@ rake install #安装默认主题 部署到Github &hellip;">
 </span><span class='line'>git push origin source</span></code></pre></td></tr></table></div></figure>
 
 
+<h2>配置Octopress</h2>
+
+<p>目录下的_config.yml就是Octopress的主配置文件。这里包含Main Configs，Jekyll &amp; Plugins，3rd Party Settings三个模块。
+Main Configs</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>url: http://jeluomsy.github.io #这个由rake setup_github_pages时自动获取，不需要手动输入
+</span><span class='line'>title: Jeluomsy's Blog
+</span><span class='line'>subtitle: 记录学习生活的点滴收获
+</span><span class='line'>author: Jeluomsy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一般情况下，我们只需要修改title，subtitle，author。</p>
+
+<h2>Jekyll &amp; Plugins</h2>
+
+<p>这个模块中可以修改的设置比较多。</p>
+
+<h4>文件目录配置，保持默认即可。</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root: /
+</span><span class='line'>permalink: /blog/:year/:month/:day/:title/
+</span><span class='line'>source: source
+</span><span class='line'>destination: public
+</span><span class='line'>plugins: plugins
+</span><span class='line'>code_dir: downloads/code
+</span><span class='line'>category_dir: blog/categories</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>文章在博客中如何展示的一些配置</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>paginate: 2          # 每一页显示的博文数量
+</span><span class='line'>paginate_path: "posts/:num"  # 分页路径
+</span><span class='line'>recent_posts: 10       # 侧边栏‘最近文章’中显示的博文数量
+</span><span class='line'>excerpt_link: "Read on &rarr;"  # 类似于'阅读全文'按钮的功能
+</span><span class='line'>excerpt_separator: "&lt;!--more--&gt;" # 文章只预显示这条语句之前的内容</span></code></pre></td></tr></table></div></figure>
+
+
+<p>文章标题格式
+<code>titlecase: false</code></p>
+
+<p>如果为true，就会默认首字母大写以及改变一些特殊字符的显示。默认为true。</p>
+
+<h4>侧边栏配置</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html, custom/asides/about.html]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里的路径是在source/_includes目录之下。用来显示在侧边栏显示那些内容，基本上是一些第三方社交网站。最后的about.html可以写一些个人介绍。</p>
+
+<h4>3rd Party Settings</h4>
+
+<p>这里可以配置Github的信息，评论系统disqus，以及Google Analytics。这三个是我认为有必要配置的部分。 Github只需要填上github_user:设置项。disqus和Google Analytics需要获取对应的disqus_short_name:和google_analytics_tracking_id:才可以使用。</p>
+
+<p>评论系统可以使用国内的多说，访问速度更快。</p>
+
+<p>统计可以使用国内的百度分析。</p>
+
+<h4>更换主题</h4>
+
+<p>Octopress的主题文件存放在source/.themes/隐藏目录下。在第一次成功执行rake install后，就会安装默认的主题。</p>
+
+<p>如果希望更换主题，可以在Github上搜索关键字Octopress Theme。以我当前使用的主题Slash为例，按顺序执行以下命令。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd octopress
+</span><span class='line'>$ git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
+</span><span class='line'>$ rake install['slash']
+</span><span class='line'>$ rake generate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果在执行rake install[&lsquo;slash&rsquo;]时，出现
+<code>Build Warning: Layout 'nil' requested in atom.xml does not exist.</code></p>
+
+<p>是因为无法识别nil这个值。</p>
+
+<p>将source/atom.xml和source/_includes/custom/category_feed.xml两个文件中
+<code>layout: nil</code></p>
+
+<p>改为
+<code>layout: null</code></p>
+
+<h4>分类名称永远小写的解决方法</h4>
+
+<p>在使用过程中最让我头疼的还是分类名称一直小写的问题。我把源代码中关于分类的部分都看了一遍，没有发现什么地方让分类名变成了小写。但是在网站上显示的时候却直接变成了小写。为了解决这个问题，我只能采取最笨的方法，直接修改source/_plugins目录下的categories_generate.rb插件，来控制分类名称的输出。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>case "#{category}"
+</span><span class='line'>    when "ios"
+</span><span class='line'>        self.data['title']       = "#{title_prefix}iOS"
+</span><span class='line'>        self.data['description'] = "#{meta_description_prefix}iOS"
+</span><span class='line'>    else
+</span><span class='line'>        self.data['title']       = "#{title_prefix}#{category}"
+</span><span class='line'>        self.data['description'] = "#{meta_description_prefix}#{category}"
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个方法在每一次新增分类时都可能需要修改，添加新的when语句。</p>
+
 <h2>Octopress themes</h2>
+
+<table>
+<thead>
+<tr>
+<th> Name  </th>
+<th> URL   </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> Octopress Flat </td>
+<td> <a href="https://github.com/alexharris/octopress-flat/">https://github.com/alexharris/octopress-flat/</a> </td>
+</tr>
+<tr>
+<td>   a   </td>
+<td>   <a href="http://sofreshandsogreen.herokuapp.com/">http://sofreshandsogreen.herokuapp.com/</a> </td>
+</tr>
+<tr>
+<td> Slash </td>
+<td> <a href="https://tommy351.github.io/Octopress-Theme-Slash/index_tw.html">https://tommy351.github.io/Octopress-Theme-Slash/index_tw.html</a> </td>
+</tr>
+<tr>
+<td> </td>
+<td> <a href="http://jser.it/">http://jser.it/</a> </td>
+</tr>
+<tr>
+<td> </td>
+<td> <a href="https://syui.github.io/blog/archives/">https://syui.github.io/blog/archives/</a> </td>
+</tr>
+<tr>
+<td> Oct2 </td>
+<td> <a href="http://bijumon.github.io/oct2/">http://bijumon.github.io/oct2/</a> </td>
+</tr>
+<tr>
+<td> Octoplate </td>
+<td> <a href="https://github.com/mjhea0/noLogo#screenshots">https://github.com/mjhea0/noLogo#screenshots</a> </td>
+</tr>
+<tr>
+<td> minimized </td>
+<td> <a href="https://github.com/lmm/minimized#screenshots">https://github.com/lmm/minimized#screenshots</a> </td>
+</tr>
+<tr>
+<td> </td>
+<td> <a href="http://blog.justin.kelly.org.au/octopress-theme/">http://blog.justin.kelly.org.au/octopress-theme/</a> </td>
+</tr>
+<tr>
+<td> </td>
+<td> <a href="https://www.lijinma.com/blog/archives">https://www.lijinma.com/blog/archives</a> </td>
+</tr>
+<tr>
+<td> Terminal </td>
+<td> <a href="http://ivanjovanovic.com/">http://ivanjovanovic.com/</a> </td>
+</tr>
+<tr>
+<td> </td>
+<td> <a href="https://mmistakes.github.io/hpstr-jekyll-theme/theme-setup/">https://mmistakes.github.io/hpstr-jekyll-theme/theme-setup/</a> </td>
+</tr>
+<tr>
+<td></td>
+<td> <a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes</a> </td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>Haroopad</h2>
+
+<p>跨平台，代码高亮，Vim 键绑定，多列模式，行号，折叠， Github Flavored Markdown 等功能~<br/>
+Ubuntu14 从官网下载deb包双击安装</p>
+
+<h2>Reference</h2>
+
+<p><a href="http://jeluomsy.github.io/blog/2016/01/03/build-octopress-on-github-pages/">http://jeluomsy.github.io/blog/2016/01/03/build-octopress-on-github-pages/</a></p>
 </div>
 
 
