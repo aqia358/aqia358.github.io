@@ -1,0 +1,86 @@
+---
+layout: post
+title: "Druid Graphite Emitter 监控"
+date: 2016-06-12 14:02:28 +0800
+comments: true
+categories: druid graphite 监控
+---
+##Druid Graphite  Emitter 监控
+　Graphite Emitter是druid 社区贡献的插件，需要自己打包。graphite-emitter通过graphite pickled协议将druid的监控信息发送到 graphite上。这里需要注意在配置的时候不要设置错端口，graphite pickled的端口默认是2004    
+##打包Graphite-emitter插件
+```
+git clone git@github.com:druid-io/druid.git
+cd druid
+git checkout druid-0.9.0
+cd extensions-contrib/graphite-emitter
+mvn package -DskipTests
+生成graphite-emitter-0.9.0.jar
+```
+　在druid插件安装目录下(extensions下)新建graphite-emitter目录，将上一步生成的graphite-emitter-0.9.0.jar 拷贝到graphite-emitter目录下面。同时需要metrics-core-3.1.2.jar  metrics-graphite-3.1.2.jar这两个jar包也拷贝到该目录下，druid lib下没有这两个包。需要自行添加。否则运行时会报classNotFound。
+##配置Grphite-emitter插件
+```
+druid.extensions.loadList=[...,,"graphite-emitter"]
+
+druid.monitoring.monitors=["com.metamx.metrics.JvmMonitor"]
+druid.emitter=composing
+druid.emitter.composing.emitters=["logging","graphite"]
+druid.emitter.graphite.hostname=hs021
+druid.emitter.graphite.port=2004
+druid.emitter.graphite.eventConverter={"type":"whiteList", "namespacePrefix": "druid.white-test", "ignoreHostname":true, "ignoreServiceName":false, "mapPath":"conf/druid/_common/whiteList"}
+druid.emitter.logging.logLevel=info
+```
+上面使用composing把日志同时输出到logging,graphite。druid.emitter.graphite.eventConverter使用自定义的whitelist通过 mapPath属性配置白名单的路径，最好用绝对路径。
+```
+{    
+    "ingest/events/thrownAway": ["dataSource"],    
+    "ingest/events/unparseable": ["dataSource"],    
+    "ingest/events/processed": ["dataSource"],    
+    "ingest/handoff/failed": ["dataSource"],    
+    "ingest/persists": [],   
+    "ingest/rows/output": [],    
+    "jvm/gc": [],    
+    "jvm/mem": [],    
+    "query/cpu/time": [       
+        "dataSource",        
+        "type"    
+    ],    
+    "query/node/time": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "query/node/ttfb": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "query/partial/time": [        
+        "dataSource",        
+        "type"   
+    ],    
+    "query/segment/time": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "query/segmentAndCache/time": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "query/time": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "query/wait/time": [        
+        "dataSource",        
+        "type"    
+    ],    
+    "segment/count": [],    
+    "segment/dropQueue/count": [],    
+    "segment/loadQueue/count": [],    
+    "segment/loadQueue/failed": [],    
+    "segment/loadQueue/size": [],    
+    "segment/scan/pending": [],    
+    "segment/size": [],    
+    "segment/usedPercent": [] 
+}
+```
+####Reference
+http://blog.leanote.com/post/du00/Druid%E7%9A%84Graphite%E7%9B%91%E6%8E%A7%E9%85%8D%E7%BD%AE    
