@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://aqia358.github.io/blog/2016/06/12/druid-graphite-emitter-jian-kong/</loc>
+<lastmod>2016-06-12T14:02:28+08:00</lastmod>
+</url>
+<url>
 <loc>http://aqia358.github.io/blog/2016/06/08/mysqlzi-zeng-zhu-jian-bu-lian-xu-dao-zhi-de-stormzhong-fu-xiao-fei-wen-ti/</loc>
 <lastmod>2016-06-08T08:52:35+08:00</lastmod>
 </url>
@@ -23,5 +27,14 @@
 </url>
 <url>
 <loc>http://aqia358.github.io/blog/categories/mysql/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/druid/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/graphite/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/jian-kong/</loc>
 </url>
 </urlset>
