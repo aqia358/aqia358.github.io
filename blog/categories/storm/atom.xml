@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: storm | My Octopress Blog]]></title>
+  <title><![CDATA[Category: storm | Aqia358's Blog]]></title>
   <link href="http://aqia358.github.io/blog/categories/storm/atom.xml" rel="self"/>
   <link href="http://aqia358.github.io/"/>
-  <updated>2016-06-12T14:03:38+08:00</updated>
+  <updated>2016-06-30T09:26:31+08:00</updated>
   <id>http://aqia358.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[HongLiang Liu]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>

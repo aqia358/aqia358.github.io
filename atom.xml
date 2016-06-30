@@ -1,16 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Aqia358's Blog]]></title>
   <link href="http://aqia358.github.io/atom.xml" rel="self"/>
   <link href="http://aqia358.github.io/"/>
-  <updated>2016-06-12T14:03:38+08:00</updated>
+  <updated>2016-06-30T09:26:31+08:00</updated>
   <id>http://aqia358.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[HongLiang Liu]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[sbt 常用命令]]></title>
+    <link href="http://aqia358.github.io/blog/2016/06/30/sbt-chang-yong-ming-ling/"/>
+    <updated>2016-06-30T09:19:27+08:00</updated>
+    <id>http://aqia358.github.io/blog/2016/06/30/sbt-chang-yong-ming-ling</id>
+    <content type="html"><![CDATA[<h2>sbt 命令</h2>
+
+<h4>常用命令</h4>
+
+<ol>
+<li>actions - 显示当前工程可用的命令</li>
+<li>update - 下载依赖</li>
+<li>compile - 编译代码</li>
+<li>test - 运行测试代码</li>
+<li>package - 创建一个可以发布的jar包</li>
+<li>publish-local - 把构建出来的jar包包装到本地的ivy缓存</li>
+<li>publish - 把jar包发布到远程仓库</li>
+<li>run - 执行</li>
+</ol>
+
+
+<h4>更多命令</h4>
+
+<ol>
+<li>test-failed - 运行失败的spec</li>
+<li>test-quick - 运行所有失败的以及/或者是由依赖更新的spec</li>
+<li>clean-cache - 清除所有的sbt缓存，类似于sbt的clean命令</li>
+<li>clean-lib - 删除lib_managed下的所有内容</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Druid Graphite Emitter 监控]]></title>
@@ -246,7 +279,7 @@
 <img src="http://www.walkcd.com/favicon.ico" alt="Favicon" /></li>
 <li>链接 使用<code>[linkText](url)</code>来插入链接 效果：
 <a href="http://www.walkcd.com">博客首页</a></li>
-<li>电子邮件 使用<code>&lt;邮件地址&gt;</code>来插入邮件地址 效果：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#99;&#100;&#x73;&#97;&#109;&#97;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x63;&#x64;&#x73;&#x61;&#x6d;&#97;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a></li>
+<li>电子邮件 使用<code>&lt;邮件地址&gt;</code>来插入邮件地址 效果：<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x63;&#100;&#115;&#97;&#x6d;&#97;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#100;&#115;&#97;&#x6d;&#x61;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></li>
 </ul>
 
 

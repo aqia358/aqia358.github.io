@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://aqia358.github.io/blog/2016/06/30/sbt-chang-yong-ming-ling/</loc>
+<lastmod>2016-06-30T09:19:27+08:00</lastmod>
+</url>
+<url>
 <loc>http://aqia358.github.io/blog/2016/06/12/druid-graphite-emitter-jian-kong/</loc>
 <lastmod>2016-06-12T14:02:28+08:00</lastmod>
 </url>
@@ -36,5 +40,11 @@
 </url>
 <url>
 <loc>http://aqia358.github.io/blog/categories/jian-kong/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/sbt/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/ming-ling/</loc>
 </url>
 </urlset>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sbt | Aqia358's Blog]]></title>
+  <link href="http://aqia358.github.io/blog/categories/sbt/atom.xml" rel="self"/>
+  <link href="http://aqia358.github.io/"/>
+  <updated>2016-06-30T09:26:31+08:00</updated>
+  <id>http://aqia358.github.io/</id>
+  <author>
+    <name><![CDATA[HongLiang Liu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[sbt 常用命令]]></title>
+    <link href="http://aqia358.github.io/blog/2016/06/30/sbt-chang-yong-ming-ling/"/>
+    <updated>2016-06-30T09:19:27+08:00</updated>
+    <id>http://aqia358.github.io/blog/2016/06/30/sbt-chang-yong-ming-ling</id>
+    <content type="html"><![CDATA[<h2>sbt 命令</h2>
+
+<h4>常用命令</h4>
+
+<ol>
+<li>actions - 显示当前工程可用的命令</li>
+<li>update - 下载依赖</li>
+<li>compile - 编译代码</li>
+<li>test - 运行测试代码</li>
+<li>package - 创建一个可以发布的jar包</li>
+<li>publish-local - 把构建出来的jar包包装到本地的ivy缓存</li>
+<li>publish - 把jar包发布到远程仓库</li>
+<li>run - 执行</li>
+</ol>
+
+
+<h4>更多命令</h4>
+
+<ol>
+<li>test-failed - 运行失败的spec</li>
+<li>test-quick - 运行所有失败的以及/或者是由依赖更新的spec</li>
+<li>clean-cache - 清除所有的sbt缓存，类似于sbt的clean命令</li>
+<li>clean-lib - 删除lib_managed下的所有内容</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

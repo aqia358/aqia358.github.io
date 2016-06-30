@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>mysql自增主键不连续导致的storm重复消费问题 - Aqia358's Blog</title>
+  <title>Category: sbt - Aqia358's Blog</title>
   <meta name="author" content="HongLiang Liu">
 
   
-  <meta name="description" content="storm TransactionalSpout使用mysql作为数据源，数据实时的插入到mysql 数据表中，表中的id字段为自增。spout每次从当前id读取id+a个的数据，next batch的起点为id+a.
-当用两个进程去写mysql时，会发现有数据被消费了多次。 &hellip;">
+  <meta name="description" content="Category: sbt">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://aqia358.github.io/blog/2016/06/08/mysqlzi-zeng-zhu-jian-bu-lian-xu-dao-zhi-de-stormzhong-fu-xiao-fei-wen-ti/">
+  <link rel="canonical" href="http://aqia358.github.io/blog/categories/sbt/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -44,71 +43,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Mysql自增主键不连续导致的storm重复消费问题</h1>
+    <h1 class="entry-title">Category: Sbt</h1>
     
   </header>
-
-
-
-
-<span class="categories">
   
-    <a class='category' href='/blog/categories/mysql/'>mysql</a>, <a class='category' href='/blog/categories/storm/'>storm</a>
+  <div id="blog-archives" class="category">
+
+
+
   
-</span>
+  <h2>2016</h2>
+
+<article>
+  
+<h1><a href="/blog/2016/06/30/sbt-chang-yong-ming-ling/">sbt 常用命令</a></h1>
+<time datetime="2016-06-30T09:19:27+08:00" pubdate><span class='month'>Jun</span> <span class='day'>30</span> <span class='year'>2016</span></time>
+
+<footer>
+  <span class="categories"><a class='category' href='/blog/categories/sbt/'>sbt</a>, <a class='category' href='/blog/categories/ming-ling/'>命令</a></span>
+</footer>
 
 
-<div class="entry-content"><p>storm TransactionalSpout使用mysql作为数据源，数据实时的插入到mysql 数据表中，表中的id字段为自增。spout每次从当前id读取id+a个的数据，next batch的起点为id+a.
-当用两个进程去写mysql时，会发现有数据被消费了多次。
-这是由于mysql自增主键不连续导致的，mysql 5.1.22后默认主键的自增策略为innodb_autoinc_lock_mode=1,这种模式下每次会“预申请”多余的id(handler.cc:compute_next_insert_id)。这个预留的策略是“不够时多申请几个”， 实际执行中是分步申请。至于申请几个，是由当时“已经插入了几条数据N”决定的。当auto_increment_offset＝1时，预申请的个数是 N-1。
-这样做的好处是：一次性分配足够的auto_increment id，只会将整个分配的过程锁住。但却可能会导致自增id的不连续。</p>
+</article>
+
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">HongLiang Liu</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-06-08T08:52:35+08:00" pubdate data-updated="true"></time>
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aqia358.github.io/blog/2016/06/08/mysqlzi-zeng-zhu-jian-bu-lian-xu-dao-zhi-de-stormzhong-fu-xiao-fei-wen-ti/" data-via="" data-counturl="http://aqia358.github.io/blog/2016/06/08/mysqlzi-zeng-zhu-jian-bu-lian-xu-dao-zhi-de-stormzhong-fu-xiao-fei-wen-ti/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2016/06/03/fast-markdown/" title="Previous Post: fast_markdown">&laquo; fast_markdown</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2016/06/12/druid-graphite-emitter-jian-kong/" title="Next Post: Druid Graphite Emitter 监控">Druid Graphite Emitter 监控 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>
