@@ -9,13 +9,26 @@
   <meta name="author" content="HongLiang Liu">
 
   
-  <meta name="description" content="sbt 命令 常用命令 actions - 显示当前工程可用的命令
-update - 下载依赖
-compile - 编译代码
-test - 运行测试代码
-package - 创建一个可以发布的jar包
-publish-local - 把构建出来的jar包包装到本地的ivy缓存
-publish - &hellip;">
+  <meta name="description" content="scala 操作HDFS 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path} &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -50,6 +63,95 @@ publish - &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/07/01/scala-cao-zuo-hdfs/">Scala 操作 Hdfs</a></h1>
+    
+  </header>
+
+
+  
+    <p class="meta">
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-07-01T15:14:37+08:00" pubdate data-updated="true"></time>
+      
+    </p>
+  
+  
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/crud/'>crud</a>, <a class='category' href='/blog/categories/hdfs/'>hdfs</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+  <div class="entry-content"><h3>scala 操作HDFS</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import org.apache.hadoop.conf.Configuration
+</span><span class='line'>import org.apache.hadoop.fs.{FileSystem, Path}
+</span><span class='line'> 
+</span><span class='line'>
+</span><span class='line'>object Hdfs extends App{
+</span><span class='line'> 
+</span><span class='line'>  def write(uri: String, filePath: String, data: Array[Byte]) = {
+</span><span class='line'>    System.setProperty("HADOOP_USER_NAME", "ead")
+</span><span class='line'>    val conf = new Configuration()
+</span><span class='line'>    conf.set("fs.defaultFS", uri)
+</span><span class='line'>    val fs = FileSystem.get(conf)
+</span><span class='line'>    val path = new Path(filePath)
+</span><span class='line'>    val os = fs.create(path)
+</span><span class='line'>    os.write(data)
+</span><span class='line'>    fs.close()
+</span><span class='line'>  }
+</span><span class='line'> 
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>usage</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hdfs.write("hdfs://host:8000", "{hdfs_path}", "hello".getBytes())</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -452,7 +554,7 @@ publish - &hellip;">
 <img src="http://www.walkcd.com/favicon.ico" alt="Favicon" /></li>
 <li>链接 使用<code>[linkText](url)</code>来插入链接 效果：
 <a href="http://www.walkcd.com">博客首页</a></li>
-<li>电子邮件 使用<code>&lt;邮件地址&gt;</code>来插入邮件地址 效果：<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x63;&#100;&#115;&#97;&#x6d;&#97;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#100;&#115;&#97;&#x6d;&#x61;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></li>
+<li>电子邮件 使用<code>&lt;邮件地址&gt;</code>来插入邮件地址 效果：<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#99;&#100;&#115;&#x61;&#x6d;&#97;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#99;&#100;&#115;&#97;&#x6d;&#x61;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></li>
 </ul>
 
 
@@ -1060,6 +1162,10 @@ Ubuntu14 从官网下载deb包双击安装</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/07/01/scala-cao-zuo-hdfs/">scala 操作 hdfs</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/06/30/sbt-chang-yong-ming-ling/">sbt 常用命令</a>
       </li>
     
@@ -1073,10 +1179,6 @@ Ubuntu14 从官网下载deb包双击安装</p>
     
       <li class="post">
         <a href="/blog/2016/06/03/fast-markdown/">fast_markdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/06/02/octopress-an-zhuang-and-zhu-ti-pei-zhi/">Octopress 安装 &amp; 主题配置</a>
       </li>
     
   </ul>

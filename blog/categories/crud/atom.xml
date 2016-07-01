@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: crud | Aqia358's Blog]]></title>
+  <link href="http://aqia358.github.io/blog/categories/crud/atom.xml" rel="self"/>
+  <link href="http://aqia358.github.io/"/>
+  <updated>2016-07-01T15:15:32+08:00</updated>
+  <id>http://aqia358.github.io/</id>
+  <author>
+    <name><![CDATA[HongLiang Liu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[scala 操作 hdfs]]></title>
+    <link href="http://aqia358.github.io/blog/2016/07/01/scala-cao-zuo-hdfs/"/>
+    <updated>2016-07-01T15:14:37+08:00</updated>
+    <id>http://aqia358.github.io/blog/2016/07/01/scala-cao-zuo-hdfs</id>
+    <content type="html"><![CDATA[<h3>scala 操作HDFS</h3>
+
+<pre><code>import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path}
+
+
+object Hdfs extends App{
+
+  def write(uri: String, filePath: String, data: Array[Byte]) = {
+    System.setProperty("HADOOP_USER_NAME", "ead")
+    val conf = new Configuration()
+    conf.set("fs.defaultFS", uri)
+    val fs = FileSystem.get(conf)
+    val path = new Path(filePath)
+    val os = fs.create(path)
+    os.write(data)
+    fs.close()
+  }
+
+}
+</code></pre>
+
+<h3>usage</h3>
+
+<pre><code>Hdfs.write("hdfs://host:8000", "{hdfs_path}", "hello".getBytes())
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
