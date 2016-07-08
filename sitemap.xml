@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://aqia358.github.io/blog/2016/07/08/python-virtualenv/</loc>
+<lastmod>2016-07-08T13:24:00+08:00</lastmod>
+</url>
+<url>
 <loc>http://aqia358.github.io/blog/2016/07/01/scala-cao-zuo-hdfs/</loc>
 <lastmod>2016-07-01T15:14:37+08:00</lastmod>
 </url>
@@ -59,5 +63,14 @@
 </url>
 <url>
 <loc>http://aqia358.github.io/blog/categories/crud/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/python/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/virtualenv/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/fei-root/</loc>
 </url>
 </urlset>
