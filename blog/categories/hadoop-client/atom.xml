@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hadoop-client | Aqia358's Blog]]></title>
+  <link href="http://aqia358.github.io/blog/categories/hadoop-client/atom.xml" rel="self"/>
+  <link href="http://aqia358.github.io/"/>
+  <updated>2016-07-13T12:08:40+08:00</updated>
+  <id>http://aqia358.github.io/</id>
+  <author>
+    <name><![CDATA[HongLiang Liu]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hadoop-client 2.4 dep download]]></title>
+    <link href="http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/"/>
+    <updated>2016-07-13T12:07:28+08:00</updated>
+    <id>http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download</id>
+    <content type="html"><![CDATA[<p>﻿### hadoop-client 2.4 及其依赖包下载 ###
+新建maven工程引入pom.xml
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+</span><span class='line'>  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+</span><span class='line'>  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  &lt;groupId&gt;com.mycompany.helloworld&lt;/groupId&gt;
+</span><span class='line'>  &lt;artifactId&gt;helloworld&lt;/artifactId&gt;
+</span><span class='line'>  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+</span><span class='line'>  &lt;packaging&gt;jar&lt;/packaging&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  &lt;name&gt;helloworld&lt;/name&gt;
+</span><span class='line'>  &lt;url&gt;&lt;a href="http://maven.apache.org"&gt;http://maven.apache.org&lt;/a&gt;&lt;/url&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  &lt;properties&gt;
+</span><span class='line'>    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+</span><span class='line'>  &lt;/properties&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  &lt;dependencies&gt;
+</span><span class='line'>&lt;dependency&gt;
+</span><span class='line'>  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+</span><span class='line'>  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+</span><span class='line'>  &lt;version&gt;2.4.0&lt;/version&gt;
+</span><span class='line'>&lt;/dependency&gt;
+</span><span class='line'>  &lt;/dependencies&gt;
+</span><span class='line'>  &lt;build&gt;
+</span><span class='line'>    &lt;plugins&gt;
+</span><span class='line'>      &lt;plugin&gt;
+</span><span class='line'>        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+</span><span class='line'>        &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+</span><span class='line'>        &lt;version&gt;2.10&lt;/version&gt;
+</span><span class='line'>        &lt;executions&gt;
+</span><span class='line'>          &lt;execution&gt;
+</span><span class='line'>            &lt;id&gt;copy-dependencies&lt;/id&gt;
+</span><span class='line'>            &lt;phase&gt;package&lt;/phase&gt;
+</span><span class='line'>            &lt;goals&gt;
+</span><span class='line'>              &lt;goal&gt;copy-dependencies&lt;/goal&gt;
+</span><span class='line'>            &lt;/goals&gt;
+</span><span class='line'>            &lt;configuration&gt;
+</span><span class='line'>              &lt;outputDirectory&gt;${project.build.directory}/alternateLocation&lt;/outputDirectory&gt;
+</span><span class='line'>              &lt;overWriteReleases&gt;false&lt;/overWriteReleases&gt;
+</span><span class='line'>              &lt;overWriteSnapshots&gt;false&lt;/overWriteSnapshots&gt;
+</span><span class='line'>              &lt;overWriteIfNewer&gt;true&lt;/overWriteIfNewer&gt;
+</span><span class='line'>            &lt;/configuration&gt;
+</span><span class='line'>          &lt;/execution&gt;
+</span><span class='line'>        &lt;/executions&gt;
+</span><span class='line'>      &lt;/plugin&gt;
+</span><span class='line'>    &lt;/plugins&gt;
+</span><span class='line'>  &lt;/build&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;/project&gt;</span></code></pre></td></tr></table></div></figure>
+mvn dependency:copy-dependencies
+下载的jar包保存在：target/dependency 下</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>hadoop-client 2.4 dep download - Aqia358's Blog</title>
+  <meta name="author" content="HongLiang Liu">
+
+  
+  <meta name="description" content="﻿### hadoop-client 2.4 及其依赖包下载 ###
+新建maven工程引入pom.xml 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Aqia358's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <img src="/images/ah_frame_transparent.svg" />
+  <h1><a href="/">Aqia358's Blog</a></h1>
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Hadoop-client 2.4 Dep Download</h1>
+    
+  </header>
+
+
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/2-dot-4/'>2.4</a>, <a class='category' href='/blog/categories/depdndency/'>depdndency</a>, <a class='category' href='/blog/categories/hadoop-client/'>hadoop-client</a>
+  
+</span>
+
+
+<div class="entry-content"><p>﻿### hadoop-client 2.4 及其依赖包下载 ###
+新建maven工程引入pom.xml</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+</span><span class='line'>  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+</span><span class='line'>  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+</span><span class='line'>
+</span><span class='line'>  &lt;groupId&gt;com.mycompany.helloworld&lt;/groupId&gt;
+</span><span class='line'>  &lt;artifactId&gt;helloworld&lt;/artifactId&gt;
+</span><span class='line'>  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+</span><span class='line'>  &lt;packaging&gt;jar&lt;/packaging&gt;
+</span><span class='line'>
+</span><span class='line'>  &lt;name&gt;helloworld&lt;/name&gt;
+</span><span class='line'>  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+</span><span class='line'>
+</span><span class='line'>  &lt;properties&gt;
+</span><span class='line'>    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+</span><span class='line'>  &lt;/properties&gt;
+</span><span class='line'>
+</span><span class='line'>  &lt;dependencies&gt;
+</span><span class='line'>&lt;dependency&gt;
+</span><span class='line'>  &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;
+</span><span class='line'>  &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;
+</span><span class='line'>  &lt;version&gt;2.4.0&lt;/version&gt;
+</span><span class='line'>&lt;/dependency&gt;
+</span><span class='line'>  &lt;/dependencies&gt;
+</span><span class='line'>  &lt;build&gt;
+</span><span class='line'>    &lt;plugins&gt;
+</span><span class='line'>      &lt;plugin&gt;
+</span><span class='line'>        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+</span><span class='line'>        &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+</span><span class='line'>        &lt;version&gt;2.10&lt;/version&gt;
+</span><span class='line'>        &lt;executions&gt;
+</span><span class='line'>          &lt;execution&gt;
+</span><span class='line'>            &lt;id&gt;copy-dependencies&lt;/id&gt;
+</span><span class='line'>            &lt;phase&gt;package&lt;/phase&gt;
+</span><span class='line'>            &lt;goals&gt;
+</span><span class='line'>              &lt;goal&gt;copy-dependencies&lt;/goal&gt;
+</span><span class='line'>            &lt;/goals&gt;
+</span><span class='line'>            &lt;configuration&gt;
+</span><span class='line'>              &lt;outputDirectory&gt;${project.build.directory}/alternateLocation&lt;/outputDirectory&gt;
+</span><span class='line'>              &lt;overWriteReleases&gt;false&lt;/overWriteReleases&gt;
+</span><span class='line'>              &lt;overWriteSnapshots&gt;false&lt;/overWriteSnapshots&gt;
+</span><span class='line'>              &lt;overWriteIfNewer&gt;true&lt;/overWriteIfNewer&gt;
+</span><span class='line'>            &lt;/configuration&gt;
+</span><span class='line'>          &lt;/execution&gt;
+</span><span class='line'>        &lt;/executions&gt;
+</span><span class='line'>      &lt;/plugin&gt;
+</span><span class='line'>    &lt;/plugins&gt;
+</span><span class='line'>  &lt;/build&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;/project&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>mvn dependency:copy-dependencies
+下载的jar包保存在：target/dependency 下</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">HongLiang Liu</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-07-13T12:07:28+08:00" pubdate data-updated="true"></time>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/" data-via="" data-counturl="http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/08/python-virtualenv/" title="Previous Post: python virtualenv">&laquo; python virtualenv</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <form action="https://www.google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:aqia358.github.io" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+  
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/">hadoop-client 2.4 dep download</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/08/python-virtualenv/">python virtualenv</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/01/scala-cao-zuo-hdfs/">scala 操作 hdfs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/06/30/sbt-chang-yong-ming-ling/">sbt 常用命令</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/06/12/druid-graphite-emitter-jian-kong/">Druid Graphite Emitter 监控</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - HongLiang Liu -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/javascripts/aharris.js"></script>
+
+</body>
+</html>
