@@ -1,0 +1,192 @@
+---
+layout: post
+title: "druid tranquility"
+date: 2016-07-28 11:50:21 +0800
+comments: true
+categories: druid tranquility avro realtime 
+---
+## 背景 ##
+Tranquility是一个scala的lib用来将数据流发送到Druid的indexing service来实现实时统计流程。Druid 有realtime node也可以进行实时统计，但是在使用中发现在数据比较多的时候，查询落到realtime node上响应非常慢。并且作者也提到不推荐使用realtime node，所以就改用tranquility。  
+druid 0.9.1.1  
+tranquility 0.8.2  
+
+## Tranquility Task ##
+Tranquility 为每个segment创建一个realtime index task，将实时数据流批量的post到[druid EventReceiverFirehose](http://druid.io/docs/latest/ingestion/firehose.html)。并且Tranquility会丢掉超过windowPeriod的数据，不发送到realtime index  task. firehose 确保超过segments interval的数据会被删掉，firehose 配置了shutoffTime={segment interval} + {windowPeriod}去关闭realtime index task, 在关闭task时， 会先将统计结果segment push到deep storage，等待hand off到historical node。这样可以确保从broker上可以一直查询到实时的统计结果。因此每个task的生存时间={segment interval} + {windowPeriod} + {push time} + {handoff time} 
+Tranquility 通过zookeeper协调所有的task，所以你能够用同一份配置创建任意个Tranquility实例，它们会把数据发送到同一个druid task上。
+
+## 遇到的一些问题 ##
+#### debug ####
+1. export JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 可以开启debug
+2. 可以修改logback.xml root log level为trace 会在log打出很多详细信息
+3. bin/tranquility -d | -debug        set sbt log level to debug
+4. 其实在 bin/tranquility -h 中可以找到这些信息 ^_^
+
+#### 配置  ####
+我们在kafka中保存的是avro格式的消息，在使用tranquility时需要使用 druid的druid-avro-extensions
+```
+sh -x bin/tranquility -d -Ddruid.extensions.directory=druid-0.9.1.1/extensions -Ddruid.extensions.loadList='["druid-avro-extensions"]' kafka -configFile druid-conf/realtime-ingestion-schema/realtime_index_stat.json
+```
+```
+{
+  "dataSources": [
+    {
+      "spec": {
+        "dataSchema": {
+          "dataSource": "datasource1",
+          "parser": {
+            "type": "avro_stream",
+            "avroBytesDecoder": {
+              "type": "schema_repo",
+              "subjectAndIdConverter": {
+                "type": "avro_1124",
+                "topic": "topic1"
+              },
+              "schemaRepository": {
+                "type": "avro_1124_rest_client",
+                "url": "{YOUR SCHEMA REPO URL}"
+              }
+            },
+            "parseSpec": {
+              "format": "timeAndDims",
+              "timestampSpec": {
+                "column": "timestamp",
+                "format": "millis"
+              },
+              "dimensionsSpec": {
+                "dimensions": ["dimension1", "dimension2"]
+              }
+            }
+          },
+          "metricsSpec": [
+            {
+              "type": "longSum",
+              "name": "metric1",
+              "fieldName": "metric1"
+            },
+            {
+              "type": "longSum",
+              "name": "metric2",
+              "fieldName": "metric2"
+            }
+          ],
+          "granularitySpec": {
+            "type": "uniform",
+            "segmentGranularity": "HOUR",
+            "queryGranularity": "HOUR"
+          }
+        },
+        "ioConfig": {
+          "type": "realtime"
+        },
+        "tuningConfig": {
+          "type": "realtime",
+          "maxRowsInMemory": "100000",
+          "intermediatePersistPeriod": "PT10M",
+          "windowPeriod": "PT10M"
+        }
+      },
+      "properties": {
+        "task.partitions": "1",
+        "task.replicants": "1",
+        "topicPattern": "topic1*"
+      }
+    },
+    {
+      "spec": {
+        "dataSchema": {
+          "dataSource": "datasource2",
+          "parser": {
+            "type": "avro_stream",
+            "avroBytesDecoder": {
+              "type": "schema_repo",
+              "subjectAndIdConverter": {
+                "type": "avro_1124",
+                "topic": "topic2"
+              },
+              "schemaRepository": {
+                "type": "avro_1124_rest_client",
+                "url": "{YOUR SCHEMA REPO URL}"
+              }
+            },
+            "parseSpec": {
+              "format": "timeAndDims",
+              "timestampSpec": {
+                "column": "timestamp",
+                "format": "millis"
+              },
+              "dimensionsSpec": {
+                "dimensions": ["dimension3", "dimension4"]
+              }
+            }
+          },
+          "metricsSpec": [
+            {
+              "type": "longSum",
+              "name": "metric3",
+              "fieldName": "metric3"
+            },
+            {
+              "type": "longSum",
+              "name": "metric4",
+              "fieldName": "metric4"
+            }
+          ],
+          "granularitySpec": {
+            "type": "uniform",
+            "segmentGranularity": "HOUR",
+            "queryGranularity": "HOUR"
+          }
+        },
+        "ioConfig": {
+          "type": "realtime"
+        },
+        "tuningConfig": {
+          "type": "realtime",
+          "maxRowsInMemory": "100000",
+          "intermediatePersistPeriod": "PT10M",
+          "windowPeriod": "PT10M"
+        }
+      },
+      "properties": {
+        "task.partitions": "1",
+        "task.replicants": "1",
+        "topicPattern": "topic2*"
+      }
+    }
+  ],
+  "properties": {
+    "zookeeper.connect": "xxx:2181,xxx:2181,xxx:2181",
+    "druid.discovery.curator.path": "/druid/prod/discovery",
+    "druid.selectors.indexing.serviceName": "druid/prod/overlord",
+    "druid.selectors.coordinator.serviceName": "druid/prod/coordinator",
+    "commit.periodMillis": "15000",
+    "consumer.numThreads": "2",
+    "kafka.zookeeper.connect": "xxxxxx:2181,xxxxxx:2181,xxxxxx:2181",
+    "kafka.group.id": "tranquility-kafka",
+    "reportDropsAsExceptions": false,
+    "reportParseExceptions": true,
+    "druidBeam.randomizeTaskId": false,
+    "topicPattern": "(topic1_1)|(topic1_2)|topic2_1)|(topic2_2)",
+    "serialization.format": "json"
+  }
+}
+```
+1. 将 ```"reportDropsAsExceptions": true, "reportParseExceptions": true,``` 可以显示出具体错误的信息
+2. 如果同一个配置文件里多个dataSource命名相同时后面一个datasource的配置会覆盖前面那个的配置，因为tranquility里是用datasource 做key保存配置的
+3. 在一个datasource中，properties下的topicPattern会决定哪些topic会通过正则匹配来进入该datasource的统计，但是druid avro stream的配置中只能配置一个topic，即只有一个schmea decoder. 所以通过topicPattern的topic都 会用这一个decoder去解析自己的msg。如果他们的schema不同就会报解析错误。            
+    解决方法：不同的topic用不同的schema配置，起多个tranquility实例即可。  
+4. druid-avro-extensions 不支持嵌套的schema，读嵌套的schema下的数会读不到，需要自己修改```io.druid.data.input.avro.GenericRecordAsMap```的get方法。另外Tranquility在解析kafka的msg时会调用GenericRecordAsMap的get方法，把取得的值放到json（默认Tranquility的serialization.format是json）里，但是构建json时只支持string，GenericRecordAsMap的get方法会返回```null, boolean, int, long, float, double, string, Records, Enums, Maps, Fixed```等对象，所以当你的schema中使用了这些对象也会导致Tranquility解析错误（可能是tranquility的一个bug).
+  解决办法：修改Tranquility com.metamx.tranquility.druid.input.InputRowObjectWriter第86行```jg.writeObjectField(fieldName, row.getRaw(fieldName))```为```jg.writeObjectField(fieldName, String.valueOf(row.getRaw(fieldName)))```  然后重新打包整个工程，不要只是替换tranquility-core_2.11-0.8.2.jar 这个jar包，运行时可能会出现各种少包的问题，其实是scala2.11和2.10不同编译环境打包导致的，所以务必重新打包。
+5. 在一个realtime task结束时会自动关闭并且将数据push到deepstore，如果关闭失败overload上task一直存在看日志里有```Cannot shut down yet! Sinks remaining```或者```ERROR [coordinator_handoff_scheduled_0] io.druid.curator.discovery.ServerDiscoverySelector - No server instance found``` ``` Cannot find instance of coordinator.. Did you set `druid.selectors.coordinator.serviceName=?``` 可能是你的coordinator没有启动，或者是druid common配置里没有配```druid.selectors.coordinator.serviceName=xxx```而是在coordinator配置里配的
+
+## Tranquility 发布 ##
+```
+git clone git@github.com:druid-io/tranquility.git
+cd tranquility
+git checkout yourbranch
+// develop
+sbt //进入sbt 交互模式
+project distribution
+dist //生成zip包 部署这个包即可
+```
+
