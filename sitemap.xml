@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://aqia358.github.io/blog/2016/07/28/druid-tranquility/</loc>
+<lastmod>2016-07-28T11:50:21+08:00</lastmod>
+</url>
+<url>
 <loc>http://aqia358.github.io/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/</loc>
 <lastmod>2016-07-13T12:07:28+08:00</lastmod>
 </url>
@@ -85,5 +89,14 @@
 </url>
 <url>
 <loc>http://aqia358.github.io/blog/categories/depdndency/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/tranquility/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/avro/</loc>
+</url>
+<url>
+<loc>http://aqia358.github.io/blog/categories/realtime/</loc>
 </url>
 </urlset>

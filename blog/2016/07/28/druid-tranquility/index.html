@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>druid tranquility - Aqia358's Blog</title>
+  <meta name="author" content="HongLiang Liu">
+
+  
+  <meta name="description" content="背景 Tranquility是一个scala的lib用来将数据流发送到Druid的indexing service来实现实时统计流程。Druid 有realtime node也可以进行实时统计，但是在使用中发现在数据比较多的时候，查询落到realtime node上响应非常慢。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://aqia358.github.io/blog/2016/07/28/druid-tranquility/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Aqia358's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <img src="/images/ah_frame_transparent.svg" />
+  <h1><a href="/">Aqia358's Blog</a></h1>
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Druid Tranquility</h1>
+    
+  </header>
+
+
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/avro/'>avro</a>, <a class='category' href='/blog/categories/druid/'>druid</a>, <a class='category' href='/blog/categories/realtime/'>realtime</a>, <a class='category' href='/blog/categories/tranquility/'>tranquility</a>
+  
+</span>
+
+
+<div class="entry-content"><h2>背景</h2>
+
+<p>Tranquility是一个scala的lib用来将数据流发送到Druid的indexing service来实现实时统计流程。Druid 有realtime node也可以进行实时统计，但是在使用中发现在数据比较多的时候，查询落到realtime node上响应非常慢。并且作者也提到不推荐使用realtime node，所以就改用tranquility。<br/>
+druid 0.9.1.1<br/>
+tranquility 0.8.2</p>
+
+<h2>Tranquility Task</h2>
+
+<p>Tranquility 为每个segment创建一个realtime index task，将实时数据流批量的post到<a href="http://druid.io/docs/latest/ingestion/firehose.html">druid EventReceiverFirehose</a>。并且Tranquility会丢掉超过windowPeriod的数据，不发送到realtime index  task. firehose 确保超过segments interval的数据会被删掉，firehose 配置了shutoffTime={segment interval} + {windowPeriod}去关闭realtime index task, 在关闭task时， 会先将统计结果segment push到deep storage，等待hand off到historical node。这样可以确保从broker上可以一直查询到实时的统计结果。因此每个task的生存时间={segment interval} + {windowPeriod} + {push time} + {handoff time}
+Tranquility 通过zookeeper协调所有的task，所以你能够用同一份配置创建任意个Tranquility实例，它们会把数据发送到同一个druid task上。</p>
+
+<h2>遇到的一些问题</h2>
+
+<h4>debug</h4>
+
+<ol>
+<li>export JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 可以开启debug</li>
+<li>可以修改logback.xml root log level为trace 会在log打出很多详细信息</li>
+<li>bin/tranquility -d | -debug        set sbt log level to debug</li>
+<li>其实在 bin/tranquility -h 中可以找到这些信息 ^_^</li>
+</ol>
+
+
+<h4>配置</h4>
+
+<p>我们在kafka中保存的是avro格式的消息，在使用tranquility时需要使用 druid的druid-avro-extensions</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sh -x bin/tranquility -d -Ddruid.extensions.directory=druid-0.9.1.1/extensions -Ddruid.extensions.loadList='["druid-avro-extensions"]' kafka -configFile druid-conf/realtime-ingestion-schema/realtime_index_stat.json</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "dataSources": [
+</span><span class='line'>    {
+</span><span class='line'>      "spec": {
+</span><span class='line'>        "dataSchema": {
+</span><span class='line'>          "dataSource": "datasource1",
+</span><span class='line'>          "parser": {
+</span><span class='line'>            "type": "avro_stream",
+</span><span class='line'>            "avroBytesDecoder": {
+</span><span class='line'>              "type": "schema_repo",
+</span><span class='line'>              "subjectAndIdConverter": {
+</span><span class='line'>                "type": "avro_1124",
+</span><span class='line'>                "topic": "topic1"
+</span><span class='line'>              },
+</span><span class='line'>              "schemaRepository": {
+</span><span class='line'>                "type": "avro_1124_rest_client",
+</span><span class='line'>                "url": "{YOUR SCHEMA REPO URL}"
+</span><span class='line'>              }
+</span><span class='line'>            },
+</span><span class='line'>            "parseSpec": {
+</span><span class='line'>              "format": "timeAndDims",
+</span><span class='line'>              "timestampSpec": {
+</span><span class='line'>                "column": "timestamp",
+</span><span class='line'>                "format": "millis"
+</span><span class='line'>              },
+</span><span class='line'>              "dimensionsSpec": {
+</span><span class='line'>                "dimensions": ["dimension1", "dimension2"]
+</span><span class='line'>              }
+</span><span class='line'>            }
+</span><span class='line'>          },
+</span><span class='line'>          "metricsSpec": [
+</span><span class='line'>            {
+</span><span class='line'>              "type": "longSum",
+</span><span class='line'>              "name": "metric1",
+</span><span class='line'>              "fieldName": "metric1"
+</span><span class='line'>            },
+</span><span class='line'>            {
+</span><span class='line'>              "type": "longSum",
+</span><span class='line'>              "name": "metric2",
+</span><span class='line'>              "fieldName": "metric2"
+</span><span class='line'>            }
+</span><span class='line'>          ],
+</span><span class='line'>          "granularitySpec": {
+</span><span class='line'>            "type": "uniform",
+</span><span class='line'>            "segmentGranularity": "HOUR",
+</span><span class='line'>            "queryGranularity": "HOUR"
+</span><span class='line'>          }
+</span><span class='line'>        },
+</span><span class='line'>        "ioConfig": {
+</span><span class='line'>          "type": "realtime"
+</span><span class='line'>        },
+</span><span class='line'>        "tuningConfig": {
+</span><span class='line'>          "type": "realtime",
+</span><span class='line'>          "maxRowsInMemory": "100000",
+</span><span class='line'>          "intermediatePersistPeriod": "PT10M",
+</span><span class='line'>          "windowPeriod": "PT10M"
+</span><span class='line'>        }
+</span><span class='line'>      },
+</span><span class='line'>      "properties": {
+</span><span class='line'>        "task.partitions": "1",
+</span><span class='line'>        "task.replicants": "1",
+</span><span class='line'>        "topicPattern": "topic1*"
+</span><span class='line'>      }
+</span><span class='line'>    },
+</span><span class='line'>    {
+</span><span class='line'>      "spec": {
+</span><span class='line'>        "dataSchema": {
+</span><span class='line'>          "dataSource": "datasource2",
+</span><span class='line'>          "parser": {
+</span><span class='line'>            "type": "avro_stream",
+</span><span class='line'>            "avroBytesDecoder": {
+</span><span class='line'>              "type": "schema_repo",
+</span><span class='line'>              "subjectAndIdConverter": {
+</span><span class='line'>                "type": "avro_1124",
+</span><span class='line'>                "topic": "topic2"
+</span><span class='line'>              },
+</span><span class='line'>              "schemaRepository": {
+</span><span class='line'>                "type": "avro_1124_rest_client",
+</span><span class='line'>                "url": "{YOUR SCHEMA REPO URL}"
+</span><span class='line'>              }
+</span><span class='line'>            },
+</span><span class='line'>            "parseSpec": {
+</span><span class='line'>              "format": "timeAndDims",
+</span><span class='line'>              "timestampSpec": {
+</span><span class='line'>                "column": "timestamp",
+</span><span class='line'>                "format": "millis"
+</span><span class='line'>              },
+</span><span class='line'>              "dimensionsSpec": {
+</span><span class='line'>                "dimensions": ["dimension3", "dimension4"]
+</span><span class='line'>              }
+</span><span class='line'>            }
+</span><span class='line'>          },
+</span><span class='line'>          "metricsSpec": [
+</span><span class='line'>            {
+</span><span class='line'>              "type": "longSum",
+</span><span class='line'>              "name": "metric3",
+</span><span class='line'>              "fieldName": "metric3"
+</span><span class='line'>            },
+</span><span class='line'>            {
+</span><span class='line'>              "type": "longSum",
+</span><span class='line'>              "name": "metric4",
+</span><span class='line'>              "fieldName": "metric4"
+</span><span class='line'>            }
+</span><span class='line'>          ],
+</span><span class='line'>          "granularitySpec": {
+</span><span class='line'>            "type": "uniform",
+</span><span class='line'>            "segmentGranularity": "HOUR",
+</span><span class='line'>            "queryGranularity": "HOUR"
+</span><span class='line'>          }
+</span><span class='line'>        },
+</span><span class='line'>        "ioConfig": {
+</span><span class='line'>          "type": "realtime"
+</span><span class='line'>        },
+</span><span class='line'>        "tuningConfig": {
+</span><span class='line'>          "type": "realtime",
+</span><span class='line'>          "maxRowsInMemory": "100000",
+</span><span class='line'>          "intermediatePersistPeriod": "PT10M",
+</span><span class='line'>          "windowPeriod": "PT10M"
+</span><span class='line'>        }
+</span><span class='line'>      },
+</span><span class='line'>      "properties": {
+</span><span class='line'>        "task.partitions": "1",
+</span><span class='line'>        "task.replicants": "1",
+</span><span class='line'>        "topicPattern": "topic2*"
+</span><span class='line'>      }
+</span><span class='line'>    }
+</span><span class='line'>  ],
+</span><span class='line'>  "properties": {
+</span><span class='line'>    "zookeeper.connect": "xxx:2181,xxx:2181,xxx:2181",
+</span><span class='line'>    "druid.discovery.curator.path": "/druid/prod/discovery",
+</span><span class='line'>    "druid.selectors.indexing.serviceName": "druid/prod/overlord",
+</span><span class='line'>    "druid.selectors.coordinator.serviceName": "druid/prod/coordinator",
+</span><span class='line'>    "commit.periodMillis": "15000",
+</span><span class='line'>    "consumer.numThreads": "2",
+</span><span class='line'>    "kafka.zookeeper.connect": "xxxxxx:2181,xxxxxx:2181,xxxxxx:2181",
+</span><span class='line'>    "kafka.group.id": "tranquility-kafka",
+</span><span class='line'>    "reportDropsAsExceptions": false,
+</span><span class='line'>    "reportParseExceptions": true,
+</span><span class='line'>    "druidBeam.randomizeTaskId": false,
+</span><span class='line'>    "topicPattern": "(topic1_1)|(topic1_2)|topic2_1)|(topic2_2)",
+</span><span class='line'>    "serialization.format": "json"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>将 <code>"reportDropsAsExceptions": true, "reportParseExceptions": true,</code> 可以显示出具体错误的信息</li>
+<li>如果同一个配置文件里多个dataSource命名相同时后面一个datasource的配置会覆盖前面那个的配置，因为tranquility里是用datasource 做key保存配置的</li>
+<li>在一个datasource中，properties下的topicPattern会决定哪些topic会通过正则匹配来进入该datasource的统计，但是druid avro stream的配置中只能配置一个topic，即只有一个schmea decoder. 所以通过topicPattern的topic都 会用这一个decoder去解析自己的msg。如果他们的schema不同就会报解析错误。          <br/>
+ 解决方法：不同的topic用不同的schema配置，起多个tranquility实例即可。</li>
+<li>druid-avro-extensions 不支持嵌套的schema，读嵌套的schema下的数会读不到，需要自己修改<code>io.druid.data.input.avro.GenericRecordAsMap</code>的get方法。另外Tranquility在解析kafka的msg时会调用GenericRecordAsMap的get方法，把取得的值放到json（默认Tranquility的serialization.format是json）里，但是构建json时只支持string，GenericRecordAsMap的get方法会返回<code>null, boolean, int, long, float, double, string, Records, Enums, Maps, Fixed</code>等对象，所以当你的schema中使用了这些对象也会导致Tranquility解析错误（可能是tranquility的一个bug).
+解决办法：修改Tranquility com.metamx.tranquility.druid.input.InputRowObjectWriter第86行<code>jg.writeObjectField(fieldName, row.getRaw(fieldName))</code>为<code>jg.writeObjectField(fieldName, String.valueOf(row.getRaw(fieldName)))</code>  然后重新打包整个工程，不要只是替换tranquility-core_2.11-0.8.2.jar 这个jar包，运行时可能会出现各种少包的问题，其实是scala2.11和2.10不同编译环境打包导致的，所以务必重新打包。</li>
+<li>在一个realtime task结束时会自动关闭并且将数据push到deepstore，如果关闭失败overload上task一直存在看日志里有<code>Cannot shut down yet! Sinks remaining</code>或者<code>ERROR [coordinator_handoff_scheduled_0] io.druid.curator.discovery.ServerDiscoverySelector - No server instance found</code> <code>Cannot find instance of coordinator.. Did you set `druid.selectors.coordinator.serviceName=?</code> 可能是你的coordinator没有启动，或者是druid common配置里没有配<code>druid.selectors.coordinator.serviceName=xxx</code>而是在coordinator配置里配的</li>
+</ol>
+
+
+<h2>Tranquility 发布</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git@github.com:druid-io/tranquility.git
+</span><span class='line'>cd tranquility
+</span><span class='line'>git checkout yourbranch
+</span><span class='line'>// develop
+</span><span class='line'>sbt //进入sbt 交互模式
+</span><span class='line'>project distribution
+</span><span class='line'>dist //生成zip包 部署这个包即可</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">HongLiang Liu</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-07-28T11:50:21+08:00" pubdate data-updated="true"></time>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://aqia358.github.io/blog/2016/07/28/druid-tranquility/" data-via="" data-counturl="http://aqia358.github.io/blog/2016/07/28/druid-tranquility/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/" title="Previous Post: hadoop-client 2.4 dep download">&laquo; hadoop-client 2.4 dep download</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <form action="https://www.google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:aqia358.github.io" />
+        <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+  
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/07/28/druid-tranquility/">druid tranquility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/13/hadoop-client-2-dot-4-dep-download/">hadoop-client 2.4 dep download</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/08/python-virtualenv/">python virtualenv</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/01/scala-cao-zuo-hdfs/">scala 操作 hdfs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/06/30/sbt-chang-yong-ming-ling/">sbt 常用命令</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - HongLiang Liu -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/javascripts/aharris.js"></script>
+
+</body>
+</html>
